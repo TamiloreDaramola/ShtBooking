@@ -1,22 +1,12 @@
 // shortlet/frontend/src/App.jsx
 import React from 'react';
-import Header from './components/Header';
-import Hero from './components/Hero';
-import ApartmentGrid from './components/ApartmentGrid';
-import CallToAction from './components/CallToAction';
-import Footer from './components/Footer';
+import RegistrationForm from './components/RegistrationForm';
 
 function App() {
   return (
-    <>
-      <Header />
-      <main>
-        <Hero />
-        <ApartmentGrid />
-        <CallToAction />
-      </main>
-      <Footer />
-    </>
+    <div className="App">
+      <RegistrationForm />
+    </div>
   );
 }
 
