@@ -1,0 +1,23 @@
+/* shortlet/frontend/src/components/CallToAction.css */
+.cta {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  text-align: center;
+  padding: 6rem 0;
+}
+
+.cta h2 {
+  color: var(--color-white);
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.cta-button {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
