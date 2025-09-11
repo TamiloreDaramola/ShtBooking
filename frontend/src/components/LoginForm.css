@@ -1,0 +1,32 @@
+/* shortlet/frontend/src/components/LoginForm.css */
+.login-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid var(--color-gray-light);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.login-form input {
+    padding: 0.75rem;
+    border: 1px solid var(--color-gray-dark);
+    font-size: 1rem;
+    color: var(--color-black);
+}
+
+.login-form button {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
