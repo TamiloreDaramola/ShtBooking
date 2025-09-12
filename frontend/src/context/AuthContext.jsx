@@ -6,12 +6,22 @@ import { useNavigate } from 'react-router-dom';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [authTokens, setAuthTokens] = useState(() =>
-        localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null
-    );
-    const [user, setUser] = useState(() =>
-        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
-    );
+    const [authTokens, setAuthTokens] = useState(() => {
+        const storedTokens = localStorage.getItem('authTokens');
+        if (storedTokens && storedTokens !== 'undefined') {
+            return JSON.parse(storedTokens);
+        }
+        return null;
+    });
+
+    const [user, setUser] = useState(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser && storedUser !== 'undefined') {
+            return JSON.parse(storedUser);
+        }
+        return null;
+    });
+
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 

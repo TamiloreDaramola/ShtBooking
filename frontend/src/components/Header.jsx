@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ isAuthenticated, logout, isAdmin }) => {
     return (
         <header className="header">
             <div className="container">
@@ -10,7 +10,20 @@ const Header = () => {
                     <h1 className="logo-text">Shortlet</h1>
                 </Link>
                 <nav className="nav">
-                    {/* The navigation links are now gone */}
+                    {isAuthenticated ? (
+                        <>
+                            <Link to="/listings" className="nav-link">Listings</Link>
+                            {isAdmin && (
+                                <Link to="/host-dashboard" className="nav-link">Dashboard</Link>
+                            )}
+                            <button onClick={logout} className="nav-button">Logout</button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" className="nav-link">Login</Link>
+                            <Link to="/register" className="nav-link">Register</Link>
+                        </>
+                    )}
                 </nav>
             </div>
         </header>
