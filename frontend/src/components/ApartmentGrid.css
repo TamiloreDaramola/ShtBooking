@@ -1,17 +1,25 @@
 /* shortlet/frontend/src/components/ApartmentGrid.css */
-.apartment-grid-section {
-  padding: 4rem 0;
+
+.apartment-grid-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.apartment-grid-section h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 2rem;
+.listings-header {
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+.apartment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    align-content: center;
+}
+
+.logout-button-container {
+    text-align: center;
+    margin-top: 2rem;
 }

@@ -8,13 +8,11 @@ const ApartmentGrid = () => {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { authTokens } = useContext(AuthContext);
+    const { authTokens, logout } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchListings = async () => {
             try {
-                // Log the token to ensure it's being retrieved
-                console.log('Attempting to fetch listings with token:', authTokens ? 'Token is present' : 'No token');
                 const config = authTokens ? {
                     headers: { 'Authorization': `Bearer ${authTokens.access}` }
                 } : {};
@@ -41,6 +39,10 @@ const ApartmentGrid = () => {
 
     return (
         <div className="apartment-grid-container">
+            <div className="listings-header">
+                <h3>Welcome, these are our apartments!</h3>
+            </div>
+            
             {listings.length === 0 ? (
                 <p>No listings are available at the moment. Please check back later.</p>
             ) : (
@@ -50,6 +52,10 @@ const ApartmentGrid = () => {
                     ))}
                 </div>
             )}
+            
+            <div className="logout-button-container">
+                <button onClick={logout} className="logout-button">Logout</button>
+            </div>
         </div>
     );
 };
