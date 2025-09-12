@@ -1,6 +1,7 @@
 // shortlet/frontend/src/components/ListingList.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const ListingList = () => {
     const [listings, setListings] = useState([]);
@@ -39,12 +40,14 @@ const ListingList = () => {
             ) : (
                 <div className="listings">
                     {listings.map(listing => (
-                        <div key={listing.id} className="listing-card">
-                            <h4>{listing.title}</h4>
-                            <p><strong>Location:</strong> {listing.location}</p>
-                            <p><strong>Price:</strong> ${listing.price_per_night} per night</p>
-                            <p>{listing.description}</p>
-                        </div>
+                        <Link to={`/listings/${listing.id}`} key={listing.id} className="listing-card-link">
+                            <div className="listing-card">
+                                <h4>{listing.title}</h4>
+                                <p><strong>Location:</strong> {listing.location}</p>
+                                <p><strong>Price:</strong> ${listing.price_per_night} per night</p>
+                                <p>{listing.description}</p>
+                            </div>
+                        </Link>
                     ))}
                 </div>
             )}
