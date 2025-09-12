@@ -1,8 +1,8 @@
 # shortlet/backend/core/views.py
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -21,16 +21,10 @@ class UserLoginSerializer(TokenObtainPairSerializer):
 class UserLoginView(TokenObtainPairView):
     serializer_class = UserLoginSerializer
 
-class UserRegistrationView(APIView):
-    permission_classes = [AllowAny]
+class UserRegistrationView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [AllowAny]
 
 class ApartmentListCreateView(generics.ListCreateAPIView):
     queryset = Apartment.objects.all()
@@ -50,3 +44,14 @@ class ApartmentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Apartment.objects.all()
     serializer_class = ApartmentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+class HostApartmentList(generics.ListAPIView):
+    """
+    API view to list all apartments for the currently authenticated host.
+    """
+    serializer_class = ApartmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Apartment.objects.filter(host=user)

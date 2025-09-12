@@ -1,29 +1,35 @@
-// shortlet/frontend/src/components/Header.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Logo from './Logo'; // Import the new Logo component
+import { Link, useLocation } from 'react-router-dom';
+import Logo from './Logo';
 
 const Header = ({ isAuthenticated, logout, isAdmin }) => {
+    const location = useLocation();
+    const isPublicPageWithoutNav = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register';
+
     return (
         <header className="header">
             <div className="container">
                 <Link to="/" className="logo-link">
-                    {/* Replace the old h1 with the new Logo component */}
                     <Logo />
                 </Link>
                 <nav className="nav">
                     {isAuthenticated ? (
                         <>
+                            {/* Authenticated links */}
                             <Link to="/listings" className="nav-link">Listings</Link>
                             {isAdmin && (
                                 <Link to="/host-dashboard" className="nav-link">Dashboard</Link>
                             )}
-                            <button onClick={logout} className="nav-button">Logout</button>
                         </>
                     ) : (
                         <>
-                            <Link to="/login" className="nav-link">Login</Link>
-                            <Link to="/register" className="nav-link">Register</Link>
+                            {/* Conditionally render login/register links */}
+                            {!isPublicPageWithoutNav && (
+                                <>
+                                    <Link to="/login" className="nav-link">Login</Link>
+                                    <Link to="/register" className="nav-link">Register</Link>
+                                </>
+                            )}
                         </>
                     )}
                 </nav>

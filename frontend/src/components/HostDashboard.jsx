@@ -1,16 +1,66 @@
-// shortlet/frontend/src/components/HostDashboard.jsx
-import React from 'react';
-import ApartmentForm from './ApartmentForm';
-import ListingList from './ListingList';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import ApartmentCard from './ApartmentCard'; // Corrected import to ApartmentCard
 
 const HostDashboard = () => {
-  return (
-    <div className="host-dashboard-container">
-      <h2>Host Dashboard</h2>
-      <ApartmentForm />
-      <ListingList />
-    </div>
-  );
+    const [listings, setListings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { authTokens, logout } = useContext(AuthContext);
+
+    useEffect(() => {
+        const fetchHostListings = async () => {
+            try {
+                const response = await axios.get(
+                    'http://127.0.0.1:8000/api/v1/apartments/host/', {
+                        headers: { 'Authorization': `Bearer ${authTokens.access}` }
+                    }
+                );
+                setListings(response.data);
+                setLoading(false);
+            } catch (err) {
+                setError('Failed to fetch your listings. Please try again later.');
+                setLoading(false);
+                console.error('Error fetching host listings:', err);
+            }
+        };
+
+        if (authTokens) {
+            fetchHostListings();
+        }
+    }, [authTokens]);
+
+    if (loading) {
+        return <div>Loading your listings...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    return (
+        <div className="host-dashboard-container">
+            <div className="dashboard-header">
+                <h3>Your Apartment Listings</h3>
+            </div>
+            
+            {listings.length === 0 ? (
+                <p>You have no listings yet. Create a new one to get started.</p>
+            ) : (
+                <div className="listing-grid">
+                    {listings.map(listing => (
+                        // Corrected component name to ApartmentCard
+                        <ApartmentCard key={listing.id} listing={listing} />
+                    ))}
+                </div>
+            )}
+            
+            <div className="logout-button-container">
+                <button onClick={logout} className="logout-button">Logout</button>
+            </div>
+        </div>
+    );
 };
 
 export default HostDashboard;
