@@ -1,8 +1,8 @@
-// shortlet/frontend/src/app/components/Header.jsx
+// shortlet/frontend/src/components/Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Header = ({ isAuthenticated, logout }) => {
+const Header = () => {
     return (
         <header className="header">
             <div className="container">
@@ -10,17 +10,7 @@ const Header = ({ isAuthenticated, logout }) => {
                     <h1 className="logo-text">Shortlet</h1>
                 </Link>
                 <nav className="nav">
-                    {isAuthenticated ? (
-                        <>
-                            <Link to="/host-dashboard" className="nav-link">Dashboard</Link>
-                            <button onClick={logout} className="nav-button">Logout</button>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/login" className="nav-link">Login</Link>
-                            <Link to="/register" className="nav-link">Register</Link>
-                        </>
-                    )}
+                    {/* The navigation links are now gone */}
                 </nav>
             </div>
         </header>

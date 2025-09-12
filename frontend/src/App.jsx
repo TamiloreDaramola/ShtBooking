@@ -28,35 +28,43 @@ import './components/ApartmentGrid.css';
 import './components/CallToAction.css';
 import './components/Footer.css';
 
-// A single page component to structure the home page's layout
-const HomePage = () => {
+// The Landing Page component
+const LandingPage = () => {
     return (
-        <>
+        <div className="landing-page-container">
             <Hero />
-            <div className="main-content">
-                <h2 className="section-title">Explore Our Listings</h2>
-                <ApartmentGrid />
+            <div className="cta">
+                <div className="cta-content">
+                    <h2>Login to view our listings.</h2>
+                    <div className="landing-buttons">
+                        <Link to="/login" className="cta-button">Login</Link>
+                        <Link to="/register" className="cta-button">Register</Link>
+                    </div>
+                </div>
             </div>
-            <CallToAction />
-        </>
+        </div>
     );
 };
 
 // Main application content that handles routing and uses context
 const AppContent = () => {
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, logout, isAdmin } = useContext(AuthContext);
 
     return (
         <div className="app-container">
-            <Header isAuthenticated={isAuthenticated} logout={logout} />
+            <Header isAuthenticated={isAuthenticated} logout={logout} isAdmin={isAdmin} />
             <main>
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
+                    <Route path="/" element={<LandingPage />} />
                     <Route path="/login" element={<UserLogin />} />
                     <Route path="/register" element={<UserRegistration />} />
                     <Route
+                        path="/listings"
+                        element={isAuthenticated ? <ApartmentGrid /> : <Navigate to="/login" />}
+                    />
+                    <Route
                         path="/host-dashboard"
-                        element={isAuthenticated ? <HostDashboard /> : <Navigate to="/login" />}
+                        element={isAdmin ? <HostDashboard /> : <Navigate to="/login" />}
                     />
                     <Route
                         path="/listings/:id"

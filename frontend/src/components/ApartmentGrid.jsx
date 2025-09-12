@@ -1,29 +1,57 @@
 // shortlet/frontend/src/components/ApartmentGrid.jsx
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 import ApartmentCard from './ApartmentCard';
-import './ApartmentGrid.css';
-
-// Placeholder data
-const apartments = [
-  { id: 1, name: 'Minimalist Loft', location: 'New York, USA', rate: 250, image: 'https://via.placeholder.com/400x300.png/000000/FFFFFF?text=Apartment+1' },
-  { id: 2, name: 'Modern Studio', location: 'London, UK', rate: 180, image: 'https://via.placeholder.com/400x300.png/000000/FFFFFF?text=Apartment+2' },
-  { id: 3, name: 'Timeless Retreat', location: 'Paris, France', rate: 320, image: 'https://via.placeholder.com/400x300.png/000000/FFFFFF?text=Apartment+3' },
-  { id: 4, name: 'Elegant Suite', location: 'Tokyo, Japan', rate: 280, image: 'https://via.placeholder.com/400x300.png/000000/FFFFFF?text=Apartment+4' },
-];
 
 const ApartmentGrid = () => {
-  return (
-    <section className="apartment-grid-section">
-      <div className="container">
-        <h2>Apartment Listings</h2>
-        <div className="grid">
-          {apartments.map(apartment => (
-            <ApartmentCard key={apartment.id} apartment={apartment} />
-          ))}
+    const [listings, setListings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { authTokens } = useContext(AuthContext);
+
+    useEffect(() => {
+        const fetchListings = async () => {
+            try {
+                // Log the token to ensure it's being retrieved
+                console.log('Attempting to fetch listings with token:', authTokens ? 'Token is present' : 'No token');
+                const config = authTokens ? {
+                    headers: { 'Authorization': `Bearer ${authTokens.access}` }
+                } : {};
+                const response = await axios.get('http://127.0.0.1:8000/api/v1/apartments/', config);
+                setListings(response.data);
+                setLoading(false);
+            } catch (err) {
+                setError('Failed to fetch listings. Please try again later.');
+                setLoading(false);
+                console.error('Error fetching listings:', err);
+            }
+        };
+
+        fetchListings();
+    }, [authTokens]);
+
+    if (loading) {
+        return <div>Loading listings...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    return (
+        <div className="apartment-grid-container">
+            {listings.length === 0 ? (
+                <p>No listings are available at the moment. Please check back later.</p>
+            ) : (
+                <div className="apartment-grid">
+                    {listings.map(listing => (
+                        <ApartmentCard key={listing.id} listing={listing} />
+                    ))}
+                </div>
+            )}
         </div>
-      </div>
-    </section>
-  );
+    );
 };
 
 export default ApartmentGrid;

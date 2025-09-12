@@ -1,35 +1,54 @@
 // shortlet/frontend/src/context/AuthContext.jsx
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [token, setToken] = useState(null);
+    const [authTokens, setAuthTokens] = useState(() =>
+        localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null
+    );
+    const [user, setUser] = useState(() =>
+        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+    );
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('access_token');
-    if (storedToken) {
-      setToken(storedToken);
-      setIsAuthenticated(true);
-    }
-  }, []);
+    const login = (tokens, userData) => {
+        setAuthTokens(tokens);
+        setUser(userData);
+        localStorage.setItem('authTokens', JSON.stringify(tokens));
+        localStorage.setItem('user', JSON.stringify(userData));
+    };
 
-  const login = (accessToken) => {
-    localStorage.setItem('access_token', accessToken);
-    setToken(accessToken);
-    setIsAuthenticated(true);
-  };
+    const logout = () => {
+        setAuthTokens(null);
+        setUser(null);
+        localStorage.removeItem('authTokens');
+        localStorage.removeItem('user');
+        navigate('/');
+    };
 
-  const logout = () => {
-    localStorage.removeItem('access_token');
-    setToken(null);
-    setIsAuthenticated(false);
-  };
+    const isAuthenticated = !!authTokens;
+    const isAdmin = user ? user.is_superuser : false;
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    useEffect(() => {
+        setLoading(false);
+    }, []);
+
+    const contextData = {
+        user,
+        authTokens,
+        isAuthenticated,
+        isAdmin,
+        login,
+        logout
+    };
+
+    return (
+        <AuthContext.Provider value={contextData}>
+            {loading ? null : children}
+        </AuthContext.Provider>
+    );
 };

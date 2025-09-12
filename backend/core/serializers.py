@@ -5,7 +5,7 @@ from .models import CustomUser, Apartment
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['username', 'password', 'is_host', 'is_guest']
+        fields = ['username', 'password', 'is_host', 'is_guest', 'is_superuser']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
