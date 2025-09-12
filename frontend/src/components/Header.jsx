@@ -1,13 +1,15 @@
 // shortlet/frontend/src/components/Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from './Logo'; // Import the new Logo component
 
 const Header = ({ isAuthenticated, logout, isAdmin }) => {
     return (
         <header className="header">
             <div className="container">
                 <Link to="/" className="logo-link">
-                    <h1 className="logo-text">Shortlet</h1>
+                    {/* Replace the old h1 with the new Logo component */}
+                    <Logo />
                 </Link>
                 <nav className="nav">
                     {isAuthenticated ? (
