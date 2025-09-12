@@ -1,13 +1,14 @@
-// shortlet/frontend/src/components/HostDashboard.js
+// shortlet/frontend/src/components/HostDashboard.jsx
 import React from 'react';
 import ApartmentForm from './ApartmentForm';
-import './HostDashboard.css';
+import ListingList from './ListingList';
 
 const HostDashboard = () => {
   return (
     <div className="host-dashboard-container">
       <h2>Host Dashboard</h2>
       <ApartmentForm />
+      <ListingList />
     </div>
   );
 };
