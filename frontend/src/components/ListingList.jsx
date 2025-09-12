@@ -1,17 +1,25 @@
 // shortlet/frontend/src/components/ListingList.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const ListingList = () => {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { token } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchListings = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/v1/apartments/');
+                const config = token ? {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                } : {};
+
+                const response = await axios.get('http://127.0.0.1:8000/api/v1/apartments/', config);
                 setListings(response.data);
                 setLoading(false);
             } catch (err) {
@@ -22,7 +30,7 @@ const ListingList = () => {
         };
 
         fetchListings();
-    }, []);
+    }, [token]);
 
     if (loading) {
         return <div>Loading listings...</div>;
@@ -34,7 +42,6 @@ const ListingList = () => {
 
     return (
         <div className="listing-list-container">
-            <h2>Available Listings</h2>
             {listings.length === 0 ? (
                 <p>No listings available yet.</p>
             ) : (
