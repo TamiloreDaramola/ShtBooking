@@ -1,11 +1,12 @@
-// shortlet/frontend/src/App.jsx
+// shortlet/frontend/src/App.js
 import React from 'react';
-import LoginForm from './components/LoginForm';
+import './App.css';
+import HostDashboard from './components/HostDashboard';
 
 function App() {
   return (
     <div className="App">
-      <LoginForm />
+      <HostDashboard />
     </div>
   );
 }
