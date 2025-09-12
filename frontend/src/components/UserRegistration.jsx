@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 const UserRegistration = () => {
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: ''
   });
   const navigate = useNavigate();
@@ -27,7 +26,7 @@ const UserRegistration = () => {
         formData
       );
       console.log('Registration successful:', response.data);
-      alert('Registration successful! Please login.');
+      alert('Registration successful! You can now log in.');
       navigate('/login');
     } catch (error) {
       console.error('Registration failed:', error.response.data);
@@ -46,17 +45,6 @@ const UserRegistration = () => {
             id="username"
             name="username"
             value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
             onChange={handleChange}
             required
           />
