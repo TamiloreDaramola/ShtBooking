@@ -1,4 +1,5 @@
 # shortlet/backend/core/views.py
+
 from rest_framework import generics, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,7 +11,7 @@ from .serializers import (
     UserSerializer,
     ApartmentSerializer
 )
-from .models import Apartment, CustomUser
+from .models import Apartment, CustomUser, ApartmentImage
 
 class UserLoginSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -55,3 +56,19 @@ class HostApartmentList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Apartment.objects.filter(host=user)
+        
+class ApartmentCreateWithImagesView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = ApartmentSerializer(data=request.data)
+        if serializer.is_valid():
+            apartment = serializer.save(host=request.user)
+
+            images_data = request.FILES.getlist('images')
+            for image_file in images_data:
+                ApartmentImage.objects.create(apartment=apartment, image=image_file)
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
