@@ -1,6 +1,6 @@
 # shortlet/backend/core/serializers.py
 from rest_framework import serializers
-from .models import CustomUser, Apartment
+from .models import CustomUser, Apartment, ApartmentImage
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,8 +15,23 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
+class ApartmentImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ApartmentImage
+        fields = ['id', 'image', 'uploaded_at']
+
 class ApartmentSerializer(serializers.ModelSerializer):
+    images = ApartmentImageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Apartment
-        fields = ['id', 'title', 'description', 'location', 'price_per_night', 'created_at']
+        fields = [
+            'id', 
+            'title', 
+            'description', 
+            'location', 
+            'price_per_night', 
+            'created_at', 
+            'images'
+        ]
         read_only_fields = ['id', 'created_at']
